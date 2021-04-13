@@ -20,6 +20,7 @@ JQ_BIN="$(whereis -b jq | awk '{print $2}')"
 XDOTOOL_BIN="$(whereis -b xdotool | awk '{print $2}')"
 XRANDR_BIN="$(whereis -b xrandr | awk '{print $2}')"
 ROFI_BIN="$(whereis -b rofi | awk '{print $2}')"
+SED_BIN="$(whereis -b sed | awk '{print $2}')"
 
 if [ -z "$NVIM_BIN" ] && [ -z "$VIM_BIN" ]; then
   echo missing vim or neovim, please install dependencies
@@ -358,6 +359,7 @@ MATCH ANY" | rofi -i -dmenu -p "How to identify windows? (xprop style)")
     $VIM_BIN $HEADLESS -nEs -c "%g/instance/norm ^dW" -c "wqa" -- "$LAYOUT_FILE"
   elif [[ "$CRITERION" = "any" ]]; then
     $VIM_BIN $HEADLESS -nEs -c '%g/instance/norm ^dW3f"di"' -c "wqa" -- "$LAYOUT_FILE"
+    $SED_BIN -e 's#"instance": ""#"instance": "^.+$"#' -i $LAYOUT_FILE
   elif [[ "$CRITERION" = "specific" ]]; then
 
     LAST_LINE=1
